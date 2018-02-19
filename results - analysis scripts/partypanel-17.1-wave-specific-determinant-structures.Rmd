@@ -1,0 +1,25 @@
+
+```{r wave-specific-determinant-structures-included-file}
+
+  cat("\n\n");
+  pandoc.header(paste0(detStruct[[1]]$name,
+                       " - carrying ear protection"), level=4);
+  cat("\n\n");
+
+  data.tree:::plot.Node(detStruct[[1]]);
+
+  cat("\n\n");
+  pandoc.header(paste0(detStruct[[2]]$name,
+                       " - wearing ear protection"), level=4);
+  cat("\n\n");
+
+  data.tree:::plot.Node(detStruct[[2]]);
+
+  cat("\n\n");
+  pandoc.header(paste0(detStruct[[3]]$name,
+                       " - buying ear protection"), level=4);
+  cat("\n\n");
+
+  data.tree:::plot.Node(detStruct[[3]]);
+
+```

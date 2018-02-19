@@ -1,0 +1,39 @@
+
+```{r}
+
+### Variables using the 'special' frequency measurement question type
+frequencyVars <- c('goingOutFreq');
+
+### Variables to rename
+waveSpecificVarnameRegExPairs <- list(c("^(.+)beliefs(.+)$", "\\1Beliefs\\2"));
+
+### Overview of variables and how to visualise and analyse them
+### (regex, type, associations)
+waveSpecificVariableList = list();
+
+########################################################################
+### Text fragments
+########################################################################
+
+### Description of this wave
+waveSpecificDescription <- "It was developed to explore the determinants of protecting one's ears when exposed to loud music in nightlife settings. Specifically, three behaviors were explored: carrying hearing protection, wearing hearing protection, and buying hearing protection if one did not carry but was exposed to loud music.";
+
+### Statement about the random numbers that were assigned
+waveSpecificRandomNumberStatement <- "Participants received two random numbers, the first between (and including) 1 and 3, and the second between (and including) 1 and 4. The first random number was used to determine about which behavior participants received questions. If it was 1, participants received questions about carrying hearing protection; if 2, about wearing hearing protection; and if 3, about buying hearing protection. Participants were told which behavior would be presented to them, and they were able to indicate that they wanted to answer questions about multiple behaviors.
+
+The second random number was not used in this wave. (It was left in the questionnaire as the LimeSurvey questionnaires for new Party Panel waves are copied from the most recent preceding wave, and since two random numbers are often used, it was deemed convenient to simply leave this question in.)";
+
+waveSpecificConfidentiality <-
+  paste0("This document is confidential. It is illegal to copy or distribute it in any form. An embargo of 2 years rests upon all Party Panel datasets. The wave described in this document started on ",
+         startDate,
+         " and therefore, the dataset of this Party Panel wave will be released under CC-BY-NC-SA (see http://creativecommons.org/licenses/by-nc-sa/4.0/) on",
+         embargoLiftedDate,
+         ".");
+waveSpecificConfidentiality <-
+  paste0("The wave described in this document started on ",
+         startDate,
+         ", and therefore this document and the other Party Panel resources would normally be embargoed until ",
+         embargoLiftedDate,
+         ". However, the embargo was lifted at the 19th of february 2018. Therefore, all resources developed for this Party Panel wave as well as the collected data are available under CC-BY-NC-SA (see http://creativecommons.org/licenses/by-nc-sa/4.0/).");
+
+```

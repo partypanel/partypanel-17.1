@@ -1,0 +1,130 @@
+```{r specific-wave-specific-analyses-1, fig.width=10, fig.height=1}
+
+singleQuestionEasyBar('epGeneralBeliefs_loudnessTooMuch');
+
+loudnessBehaviorC <- scatterPlot(dat$epGeneralBeliefs_loudnessTooMuch,
+                                 dat$epc_behavior, position='jitter',
+                                 alpha=.5, regrLine=TRUE, regrCI=TRUE,
+                                 regrLineCol="#D80F15", regrCIalpha=.5) +
+  labs(x = "Of muziek altijd te hard staat",
+       y = "Meenemen van gehoorbescherming") +
+  theme(legend.position="none",
+                   text=element_text(size=26),
+                   plot.background = element_rect(fill = "transparent",
+                                                  color = NA));
+
+loudnessBehaviorW <- scatterPlot(dat$epGeneralBeliefs_loudnessTooMuch,
+                                 dat$epc_behavior, position='jitter',
+                                 alpha=.5, regrLine=TRUE, regrCI=TRUE,
+                                 regrLineCol="#D80F15", regrCIalpha=.5) +
+  labs(x = "Of muziek altijd te hard staat",
+       y = "Dragen van gehoorbescherming") +
+  theme(legend.position="none",
+                   text=element_text(size=26),
+                   plot.background = element_rect(fill = "transparent",
+                                                  color = NA));
+  
+tmpPlot <- arrangeGrob(loudnessBehaviorC,
+                       loudnessBehaviorW,
+                       ncol=2);
+
+ggSave(plot=tmpPlot,
+       file.path(workingPath,
+                 "loudness-and-behavior-Scatterplot.png"),
+       width=14,
+       height=8,
+       bg = "transparent");
+
+knitFig(tmpPlot,
+        figWidth = 14,
+        figHeight = 8,
+        figCaption = "loudness-and-behavior-Scatterplot");
+
+```
+
+```{r specific-wave-specific-analyses-2, fig.width=10, fig.height=1}
+
+### labelDf[labelDf$varNames.cln=="epGeneralBeliefs_priceFoam", ]
+
+tmpPlot <- ggEasyBar(dat,
+                     grep('epGeneralBeliefs_price', names(dat), value=TRUE),
+                     labels=c("Foam", "Filter", "Op maat"), xlab=NULL, ylab=NULL,
+                     showInLegend="none", fontColor=NA) +
+             scale_y_continuous(breaks=seq(0, 100, 10)) +
+             theme(legend.position="none",
+                   text=element_text(size=26),
+                   plot.background = element_rect(fill = "transparent",
+                                                  color = NA),
+                   panel.grid = element_blank(),
+                   axis.ticks.x = element_line(size=1),
+                   axis.ticks.length=unit(1, 'line'));
+
+ggSave(plot=tmpPlot,
+       file.path(workingPath,
+                 "epGeneralBeliefs_prices-ggEasyBar.png"),
+       width=12,
+       height=3,
+       bg = "transparent");
+
+knitFig(tmpPlot,
+        figWidth  = 12,
+        figHeight = 3,
+        figCaption = "epGeneralBeliefs_prices");
+
+```
+
+
+```{r specific-wave-specific-analyses-3, fig.width=10, fig.height=1}
+
+singleQuestionEasyBar('epb_PBCBeliefs_knowsLocation');
+
+```
+
+
+```{r specific-wave-specific-analyses-4, fig.width=10, fig.height=1}
+
+singleQuestionEasyBar('epb_PBCBeliefs_intoxicated');
+
+```
+
+
+
+
+```{r specific-wave-specific-analyses-determinants}
+
+determinantNames <- lapply(detStruct,
+                           function(currentDetStruct) {
+                             return(currentDetStruct$intention$Get('scaleVarName',
+                                                                   traversal='level',
+                                                                   pruneFun=function(node) {
+                                                                     return(node$level<4)
+                                                                   }));
+                           });
+
+niceBehaviorNames <- c("carrying", "wearing", "buying");
+
+l_ply(seq_along(determinantNames),
+       function(i) {
+         knitFig(plotToDraw = CIBER(dat,
+                                    determinants=determinantNames[[i]],
+                                    targets=c("epc_behavior", "epw_behavior"),
+                                    xbreaks=1:7,
+                                    drawPlot = FALSE,
+                                    returnPlotOnly=TRUE),
+                 figCaption = paste0("CIBER plot for the determinants of ",
+                                     niceBehaviorNames[i],
+                                     " earplugs and the behaviors carrying and wearing"));
+});
+
+knitFig(plotToDraw = scatterPlot(dat$epc_behavior, dat$epw_behavior),
+        figCaption = "Association between carrying & wearing earplugs");
+
+behaviorScatterMatrix <- 
+  asymmetricalScatterMatrix(dat.raw,
+                            cols=grep("epcBehavior_", names(dat.raw), value=TRUE),
+                            row=grep("epwBehavior_", names(dat.raw), value=TRUE))$output$scatterMatrix;
+
+knitFig(plotToDraw = behaviorScatterMatrix,
+        figCaption = "A scattermatrix for the association between carrying & wearing earplugs");
+
+```

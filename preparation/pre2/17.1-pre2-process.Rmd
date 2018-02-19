@@ -1,0 +1,133 @@
+---
+title: "Party Panel 17.1-pre2 Report"
+author: "Greater Good (Gjalt-Jorn Peters)"
+date: "`r format(Sys.time(), '%Y-%m-%d at %X');`"
+output:
+  html_document:
+    toc: true
+    theme: united
+---
+
+Party Panel 17.1-pre2 Report
+============================
+
+Introduction
+------------
+
+Party Panel is a Dutch panel study where determinants and beliefs underlying health behaviors in the Dutch nightlife are mapped. The second wave started on the first of January 2016 and explored the determinants of visiting the first aid in case of problems.
+
+This document is the report of the second pre-study, where members of the target population responded to a number of open questions, comparable to a belief elicitation procedure as recommended by Fishbein & Ajzen (2010).
+
+```{r echo=FALSE, warning=FALSE}
+
+########################################################################
+### Paths
+########################################################################
+
+### Add any relevant paths to this vector. The script will select the
+### correct path itself.
+
+basePathVector <- c('B:/Data/research/party panel/partypanel-17.1',
+                    '');
+
+########################################################################
+### Set the variables with the paths
+########################################################################
+
+### Check which paths exist and set the first existing path in the list
+### as the base path
+basePath <- basePathVector[sapply(basePathVector, dir.exists)][1];
+
+### Set the additional paths
+outputPath <- file.path(basePath, 'preparation', 'pre2');
+workingPath <- file.path(basePath, 'preparation', 'pre2');
+dataPath <- file.path(basePath, 'preparation', 'pre2');
+scriptPath <- file.path(basePath, 'preparation', 'pre2');
+
+########################################################################
+### Filenames
+########################################################################
+
+lsSurveyNumber <- 381842;
+columnsToShow <- 10:35;
+primaryVars <- c('earplugsUB', 'earplugsDB');
+
+########################################################################
+### Final automated settings and checks
+########################################################################
+
+dataFilename <- paste0('survey_', lsSurveyNumber, '_R_data_file.csv');
+scriptFilename <- paste0('survey_', lsSurveyNumber, '_R_syntax_file.R');
+
+allVars <- c("expertise", primaryVars, "recruitment");
+
+if (!require('userfriendlyscience', quietly = FALSE)) {
+  stop("You need to have the userfriendlyscience package installed!");
+}
+
+########################################################################
+### Read data
+########################################################################
+
+dat.raw <- importLimeSurveyData(datafile = file.path(dataPath, dataFilename),
+                                scriptfile = file.path(scriptPath, scriptFilename),
+                                encoding="UTF-8");
+
+dat.cln <- dat.raw;
+
+dat.cln$missings <-
+  rowSums(is.na(dat.cln[, primaryVars]), na.rm=TRUE);
+
+dat.cln <- dat.cln[dat.cln$missings == 0, ];
+
+```
+
+The raw dataset contained `r nrow(dat.raw);` rows and `r ncol(dat.raw);` columns. After removal of empty entries, `r nrow(dat.cln);` rows and `r ncol(dat.cln);` columns remained.
+
+The full list of variablenames is `r vecTxt(names(dat.cln));`.
+
+```{r echo=FALSE, results="asis"}
+
+getLabel <- function(dat, varName) {
+  return(attr(dat, 'variable.labels')[names(dat) == varName]);
+}
+
+showAnswersPerParticipant <- function(dat, varName, secondVarName=NULL) {
+  if (length(na.omit(dat[, varName]))) {
+    if (is.null(secondVarName)) {
+      cat0("### ", varName, "\n",
+           getLabel(dat, varName),  "\n\n",
+           paste0(paste0("* id. ", dat[nchar(dat[, varName]) > 0 &
+                                         !is.na(dat[, varName]), 'id'],
+                         ": ", dat[nchar(dat[, varName]) > 0 &
+                                     !is.na(dat[, varName]), varName]),
+                  collapse="\n"), "\n\n");
+    } else {
+      cat0("### ", varName, "\n",
+           getLabel(dat, varName),  "\n\n",
+           getLabel(dat, secondVarName),  "\n\n",
+           paste0(paste0("* id. ", dat[nchar(dat[, varName]) > 0 &
+                                         !is.na(dat[, varName]), 'id'],
+                         ": ", dat[nchar(dat[, varName]) > 0 &
+                                     !is.na(dat[, varName]), varName],
+                         " **-- justification --** ", dat[nchar(dat[, varName]) > 0 &
+                                     !is.na(dat[, varName]), secondVarName]),
+                  collapse="\n"), "\n\n");
+    }
+  } else {
+    cat("###", varName, "\nThis variable has no data.\n\n");
+  }
+}
+
+for (currentVar in allVars) {
+  showAnswersPerParticipant(dat.cln, currentVar);
+}
+
+for (currentVar in 1:10) {
+  showAnswersPerParticipant(dat.cln,
+                            paste0("extraQuestions_vraag", currentVar),
+                            paste0("extraQuestJustificat_vraag", currentVar));
+}
+
+```
+
