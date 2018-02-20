@@ -1,6 +1,14 @@
-```{r specific-wave-specific-analyses-1, fig.width=10, fig.height=1}
+#### Vinden deelnemers dat de muziek vaak te hard staat?
+
+```{r specific-wave-specific-analyses-loudness-1, fig.width=10, fig.height=1}
 
 singleQuestionEasyBar('epGeneralBeliefs_loudnessTooMuch');
+
+```
+
+##### Verband met meenemen en dragen van gehoorbescherming
+
+```{r specific-wave-specific-analyses-loudness-2, fig.width=10, fig.height=1}
 
 loudnessBehaviorC <- scatterPlot(dat$epGeneralBeliefs_loudnessTooMuch,
                                  dat$epc_behavior, position='jitter',
@@ -42,7 +50,9 @@ knitFig(tmpPlot,
 
 ```
 
-```{r specific-wave-specific-analyses-2, fig.width=10, fig.height=1}
+#### Hoe beoordelen deelnemers de prijzen van gehoorbescherming?
+
+```{r specific-wave-specific-analyses-prices-, fig.width=10, fig.height=1}
 
 ### labelDf[labelDf$varNames.cln=="epGeneralBeliefs_priceFoam", ]
 
@@ -73,6 +83,7 @@ knitFig(tmpPlot,
 
 ```
 
+#### Losse vragen in detail
 
 ```{r specific-wave-specific-analyses-3, fig.width=10, fig.height=1}
 
@@ -80,15 +91,13 @@ singleQuestionEasyBar('epb_PBCBeliefs_knowsLocation');
 
 ```
 
-
 ```{r specific-wave-specific-analyses-4, fig.width=10, fig.height=1}
 
 singleQuestionEasyBar('epb_PBCBeliefs_intoxicated');
 
 ```
 
-
-
+#### Samenhang tussen gedrag en determinanten
 
 ```{r specific-wave-specific-analyses-determinants}
 
@@ -119,12 +128,12 @@ l_ply(seq_along(determinantNames),
 knitFig(plotToDraw = scatterPlot(dat$epc_behavior, dat$epw_behavior),
         figCaption = "Association between carrying & wearing earplugs");
 
-behaviorScatterMatrix <- 
-  asymmetricalScatterMatrix(dat.raw,
-                            cols=grep("epcBehavior_", names(dat.raw), value=TRUE),
-                            row=grep("epwBehavior_", names(dat.raw), value=TRUE))$output$scatterMatrix;
-
-knitFig(plotToDraw = behaviorScatterMatrix,
-        figCaption = "A scattermatrix for the association between carrying & wearing earplugs");
+# behaviorScatterMatrix <- 
+#   asymmetricalScatterMatrix(dat.raw,
+#                             cols=grep("epcBehavior_", names(dat.raw), value=TRUE),
+#                             row=grep("epwBehavior_", names(dat.raw), value=TRUE))$output$scatterMatrix;
+# 
+# knitFig(plotToDraw = behaviorScatterMatrix,
+#         figCaption = "A scattermatrix for the association between carrying & wearing earplugs");
 
 ```
