@@ -36,4 +36,7 @@ waveSpecificConfidentiality <-
          embargoLiftedDate,
          ". However, the embargo was lifted at the 19th of february 2018. Therefore, all resources developed for this Party Panel wave as well as the collected data are available under CC-BY-NC-SA (see http://creativecommons.org/licenses/by-nc-sa/4.0/).");
 
+### Specific thank-yous for people
+waveSpecificThankYous <- "For this wave specifically, we would like to thank Ilke Jellema and Willem Westermann for thinking along with the questionnaire.";
+
 ```
