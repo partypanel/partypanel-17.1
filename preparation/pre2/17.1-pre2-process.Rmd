@@ -14,35 +14,45 @@ Party Panel 17.1-pre2 Report
 Introduction
 ------------
 
-Party Panel is a Dutch panel study where determinants and beliefs underlying health behaviors in the Dutch nightlife are mapped. The second wave started on the first of January 2016 and explored the determinants of visiting the first aid in case of problems.
+Party Panel is a Dutch panel study where determinants and beliefs underlying health behaviors in the Dutch nightlife are mapped. The third (2017) wave explored the determinants of visiting the first aid in case of problems.
 
-This document is the report of the second pre-study, where members of the target population responded to a number of open questions, comparable to a belief elicitation procedure as recommended by Fishbein & Ajzen (2010).
+This document is the report of the second pre-study, where members of the target population responded to a number of open questions, comparable to a belief elicitation procedure as recommended by Fishbein & Ajzen (2010). Put simply, they were asked about what they thought were the reasons people did, or did not, engage in the target behaviors selected in the first round.
 
 ```{r echo=FALSE, warning=FALSE}
 
 ########################################################################
-### Paths
+### Packages
 ########################################################################
 
-### Add any relevant paths to this vector. The script will select the
-### correct path itself.
+if (!require('userfriendlyscience', quietly = FALSE)) {
+  stop("You need to have the userfriendlyscience package installed!");
+}
+safeRequire('here');
+safeRequire('knitr');
+safeRequire('pander');
 
-basePathVector <- c('B:/Data/research/party panel/partypanel-17.1',
-                    '');
+########################################################################
+### Settings
+########################################################################
+
+knitr::opts_chunk$set(echo=FALSE);
+knitr::opts_chunk$set(cache=FALSE);
+knitr::opts_chunk$set(comment=NA);
+
+options(width = 160);
+options(xtable.type = "html");
+panderOptions('knitr.auto.asis', FALSE);
+panderOptions('table.split.table', Inf);
 
 ########################################################################
 ### Set the variables with the paths
 ########################################################################
 
-### Check which paths exist and set the first existing path in the list
-### as the base path
-basePath <- basePathVector[sapply(basePathVector, dir.exists)][1];
-
 ### Set the additional paths
-outputPath <- file.path(basePath, 'preparation', 'pre2');
-workingPath <- file.path(basePath, 'preparation', 'pre2');
-dataPath <- file.path(basePath, 'preparation', 'pre2');
-scriptPath <- file.path(basePath, 'preparation', 'pre2');
+outputPath <- here('preparation', 'pre2');
+workingPath <- here('preparation', 'pre2');
+dataPath <- here('preparation', 'pre2');
+scriptPath <- here('preparation', 'pre2');
 
 ########################################################################
 ### Filenames
@@ -60,10 +70,6 @@ dataFilename <- paste0('survey_', lsSurveyNumber, '_R_data_file.csv');
 scriptFilename <- paste0('survey_', lsSurveyNumber, '_R_syntax_file.R');
 
 allVars <- c("expertise", primaryVars, "recruitment");
-
-if (!require('userfriendlyscience', quietly = FALSE)) {
-  stop("You need to have the userfriendlyscience package installed!");
-}
 
 ########################################################################
 ### Read data

@@ -2,14 +2,162 @@
 ```{r}
 
 ### Variables using the 'special' frequency measurement question type
-frequencyVars <- c('goingOutFreq');
+frequencyVars <- c('goingOutFreq', 'leftVenueFreq');
 
 ### Variables to rename
 waveSpecificVarnameRegExPairs <- list(c("^(.+)beliefs(.+)$", "\\1Beliefs\\2"));
 
 ### Overview of variables and how to visualise and analyse them
 ### (regex, type, associations)
-waveSpecificVariableList = list();
+waveSpecificVariableList <-
+  list(epPossession = list(regex = "^epPossession$",
+                           type = "dichotomous",
+                           showFreq = TRUE,
+                           showDiamondPlot=FALSE,
+                           showBarPlot=FALSE,
+                           showPropPlot=FALSE,
+                           showRidgelinePlot=FALSE,
+                           plotWidthMultiplier=1,
+                           assoc = NULL,
+                           caption = "Whether participants have earplugs"),
+       epPossessionType = list(regex = "epPossessionType",    ### Regex to match one or more variables
+                               type = "multi",                ### Dichotomous, multi, open, array
+                               showFreq = TRUE,               ### Frequencies
+                               showDiamondPlot=FALSE,         ### Diamond plots
+                               showBarPlot=FALSE,             ### EasyBar plot
+                               showPropPlot=FALSE,            ### Plot with proportions
+                               showRidgelinePlot=FALSE,       ### Ridgeline plots
+                               plotWidthMultiplier=1,         ### For especially narrow or wide plots
+                               assoc = NULL,                  ### With which variables to show associations
+                               caption = "Type of earplugs participants have"),
+       carryingEarPlugVenues = list(regex = "epc_Behavior",   ### Regex to match one or more variables
+                                    type = "array",           ### Dichotomous, multi, open, array
+                                    showFreq = TRUE,          ### Frequencies
+                                    showDiamondPlot=TRUE,     ### Diamond plots
+                                    showBarPlot=FALSE,        ### EasyBar plot
+                                    showPropPlot=TRUE,        ### Plot with proportions
+                                    showRidgelinePlot=TRUE,   ### Ridgeline plots
+                                    plotWidthMultiplier=1,    ### For especially narrow or wide plots
+                                    assoc = NULL,             ### With which variables to show associations 
+                                    caption = "To which venues participants bring earplugs"),
+       wearingEarPlugVenues = list(regex = "epw_Behavior",
+                                   type="array",
+                                   showFreq=TRUE,
+                                   showBarPlot=TRUE,
+                                   showPropPlot=TRUE,
+                                   showRidgelinePlot=TRUE,
+                                   plotWidthMultiplier=1,
+                                   caption="At which venues participants wear earplugs"),
+       generalBeliefs = list(regex = "^epGeneralBeliefs",
+                             type = "array",
+                             showFreq = FALSE,
+                             showDiamondPlot= TRUE,
+                             showBarPlot=TRUE,
+                             showPropPlot=FALSE,
+                             showRidgelinePlot=FALSE,
+                             plotWidthMultiplier=1,
+                             assoc = NULL,
+                             caption = "General questions about beliefs people have about earplugs"),
+       epPossessionType = list(regex = "^epLeftDueToVolume$",        ### Regex to match one or more variables
+                               type = "dichotomous",                 ### Dichotomous, multi, open, array
+                               showFreq = TRUE,                      ### Frequencies
+                               showDiamondPlot=TRUE,                 ### Diamond plots
+                               showBarPlot=FALSE,                    ### EasyBar plot
+                               showPropPlot=FALSE,                   ### Plot with proportions
+                               showRidgelinePlot=TRUE,               ### Ridgeline plots
+                               plotWidthMultiplier=1,                ### For especially narrow or wide plots
+                               assoc = NULL,                         ### With which variables to show associations
+                               caption = "Venues people left because of the volume"),
+       NULL); ### Final element to enable easy copy/pasting above
+
+########################################################################
+### Lottery (if there is one)
+########################################################################
+
+### The lottery works by setting the minimum and maximum ID of the
+### entries for this wave in the incentives table of the database. These
+### are the IDs eligible for winning a prize.
+###
+### We then create a vector of the prizes.
+###
+### Then, we select as many random IDs from the 'elegibility vector' as
+### we have prizes in the 'prizes vector'. This list is then sorted
+### ascendingly (i.e. from low to high).
+###
+### We then generate the MySQL query required to retrieve the
+### email addresses corresponding to these IDs.
+###
+### These email addresses are then combined with the prizes to generate
+### a complete list. This final list is then sent to the Celebrate Safe
+### project executives for further handling. Note that these last steps
+### are not stored in this file to protect the participants' privacy.
+
+### We first set the seed, which is always the starting date of the
+### Party Panel wave as YYYYMMDD.
+set.seed(20170420);
+
+### IDs of 17.1 entries in incentives table
+eligibleIDs <- 425:690;
+
+### For wave 17.1, we have 1 set of Earproof Performer earplugs,
+### 4 sets of Earproof Platinum or Silver earplugs, and 5
+### Thunderplugs blisterpacks.
+prizes <- c(rep("Earproof Performer", 1),
+            rep("Earproof Platinum/Silver", 4),
+            rep("Thunderplugs", 5));
+
+### Select 10 IDs
+winners <- sample(eligibleIDs, 10);
+
+### Sort IDs ascendingly
+winners <- sort(winners);
+
+### Match winners to prizes
+winnersMatchedToPrizes <- cbind(winners, prizes);
+
+### Generate MySQL query to retrieve email addresses for each ID
+mySqlQuery <-
+  paste0("SELECT * FROM `pp_incentives` WHERE `id` IN (",
+         paste0(winners, collapse=", "), ");");
+
+### Show the query to run it using HeidiSQL or another MySQL interface
+#cat(mySqlQuery);
+
+### (The following lines should usually cause an error, because the
+###  personal data (each winner's email address) should never be
+###  stored in this file. Therefore, this is run using tryCatch to
+###  catch that error.)
+tryCatch({
+  
+### Then, using HeidiSQL or another MySQL interface, run the
+### query and export the results. In HeidiSQL, this can be done
+### by rightclicking the list of results and selecting
+### "Export grid rows". Make sure to select "Copy to clipboard" as
+### the "Output target", "Delimited text" as "Output format", and
+### "Complete" as "Row selection". The other settings can remain at
+### their defaults (column names in first row; comma as field
+### separator, duoble quotes as encloser, and carriage return and
+### newline symbols for line termination).
+### Then, paste the results between the two single quotes
+### on the following lines:
+winnerData <- read.csv(text =
+'
+
+'
+);
+### IMPORTANT: once the final list has been generated, remove
+### these data again to protect the participants' privacy!!!
+
+### Add the vector with prizes to this data frame (check 
+winnerData <- cbind(winnerData, prizes);
+
+### Show the final list
+#print(winnerData);
+
+}, error = function(e) {
+  ### No lottery data entered.
+  invisible(NULL);
+}); ### Close tryCatch
 
 ########################################################################
 ### Text fragments
