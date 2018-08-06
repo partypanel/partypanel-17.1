@@ -65,12 +65,6 @@ waveSpecificScales <- lapply(waveSpecificScales, function(rgx) {
   return(grep(rgx, names(dat), value=TRUE));
 });
 
-
-if (!is.null(waveSpecificScales)) {
-  dat <- makeScales(dat = dat,
-                    scales = waveSpecificScales);
-}
-
 ###############################################################################
 ### Specify determinant structures
 ###############################################################################

@@ -20,6 +20,7 @@ waveSpecificVariableList <-
                            plotWidthMultiplier=1,
                            assoc = NULL,
                            caption = "Whether participants have earplugs"),
+       
        epPossessionType = list(regex = "epPossessionType",    ### Regex to match one or more variables
                                type = "multi",                ### Dichotomous, multi, open, array
                                showFreq = TRUE,               ### Frequencies
@@ -30,6 +31,7 @@ waveSpecificVariableList <-
                                plotWidthMultiplier=1,         ### For especially narrow or wide plots
                                assoc = NULL,                  ### With which variables to show associations
                                caption = "Type of earplugs participants have"),
+       
        carryingEarPlugVenues = list(regex = "epc_Behavior",   ### Regex to match one or more variables
                                     type = "array",           ### Dichotomous, multi, open, array
                                     showFreq = TRUE,          ### Frequencies
@@ -40,6 +42,7 @@ waveSpecificVariableList <-
                                     plotWidthMultiplier=1,    ### For especially narrow or wide plots
                                     assoc = NULL,             ### With which variables to show associations 
                                     caption = "To which venues participants bring earplugs"),
+       
        wearingEarPlugVenues = list(regex = "epw_Behavior",
                                    type="array",
                                    showFreq=TRUE,
@@ -48,6 +51,7 @@ waveSpecificVariableList <-
                                    showRidgelinePlot=TRUE,
                                    plotWidthMultiplier=1,
                                    caption="At which venues participants wear earplugs"),
+       
        generalBeliefs = list(regex = "^epGeneralBeliefs",
                              type = "array",
                              showFreq = FALSE,
@@ -55,20 +59,36 @@ waveSpecificVariableList <-
                              showBarPlot=TRUE,
                              showPropPlot=FALSE,
                              showRidgelinePlot=FALSE,
-                             plotWidthMultiplier=1,
+                             plotWidthMultiplier=2,
                              assoc = NULL,
                              caption = "General questions about beliefs people have about earplugs"),
+       
        epPossessionType = list(regex = "^epLeftDueToVolume$",        ### Regex to match one or more variables
                                type = "dichotomous",                 ### Dichotomous, multi, open, array
                                showFreq = TRUE,                      ### Frequencies
-                               showDiamondPlot=TRUE,                 ### Diamond plots
-                               showBarPlot=FALSE,                    ### EasyBar plot
+                               showDiamondPlot=FALSE,                ### Diamond plots
+                               showBarPlot=TRUE,                     ### EasyBar plot
                                showPropPlot=FALSE,                   ### Plot with proportions
                                showRidgelinePlot=TRUE,               ### Ridgeline plots
                                plotWidthMultiplier=1,                ### For especially narrow or wide plots
                                assoc = NULL,                         ### With which variables to show associations
-                               caption = "Venues people left because of the volume"),
-       NULL); ### Final element to enable easy copy/pasting above
+                               caption = "Whether participants ever left a venues because of the volume"),
+
+       epLeftVenues = list(regex = "^leftVenueFreq_[^_]+$",        ### Regex to match one or more variables
+                           type = "array",                       ### Dichotomous, multi, open, array
+                           showFreq = TRUE,                      ### Frequencies
+                           showDiamondPlot=TRUE,                 ### Diamond plots
+                           showBarPlot=FALSE,                    ### EasyBar plot
+                           showPropPlot=FALSE,                   ### Plot with proportions
+                           showRidgelinePlot=TRUE,               ### Ridgeline plots
+                           plotWidthMultiplier=2,                ### For especially narrow or wide plots
+                           assoc = NULL,                         ### With which variables to show associations
+                           caption = "Venues people left because of the volume"),
+       
+       delete = NULL); ### Final element to enable easy copy/pasting above
+
+waveSpecificVariableList <-
+  waveSpecificVariableList[names(waveSpecificVariableList) != 'delete'];
 
 ########################################################################
 ### Lottery (if there is one)
